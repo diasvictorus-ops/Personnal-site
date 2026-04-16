@@ -1,14 +1,18 @@
 <html>
     <head> 
 
-    <title>seja bem vindo</title>
+    <title>Meu Primeiro Site de desenhos
+        
+    </title>
 
      </head>
 <body style="align-items: center; text-align: center;">
 
-    <strong>Nome:</strong>
-    
-    <input type="text" placeholder="Digite seu nome de usuário">
+ 
+<strong>Nome:</strong><input style="align-items: left; text-align: left;" type="text" id="nomeInput" placeholder="Visitante, digite seu nome...">
+
+  <button onclick="adicionarVisitante()">Adicionar</button>
+
     <hr>
     <h3 style="font-size: 10px;"> Seja bem vindo! </h3>
     <h4 style="font-size: 10px;">Esse é o site dos desenhos que eu faço </h4>
@@ -20,9 +24,131 @@
     
     <!--Colar os meu desenhos aqui...-->
     <img src="Flash002.jpg" alt="Meu desenho" width="200px">
-<img src="Superman.jpg" alt="Meu desenho" width="200px">
+    <img src="Superman.jpg" alt="Meu desenho" width="200px">
 
 
+
+
+    <hr>
+
+
+
+  
+
+
+
+  <h3>Total de visitantes: <span id="contador">0</span></h3>
+
+
+
+  <h4>Lista de visitantes:</h4>
+
+  <ul id="listaVisitantes"></ul>
+
+<!--Banco de dados - NÃO APAGAR-->
+<!-- Firebase SDK -->
+  <script type="module">
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+
+    import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+
+
+    const firebaseConfig = {
+
+      
+  apiKey: "AIzaSyDHalOm8ymhs5sqf32MAZGZsen56003BdA",
+
+  authDomain: "victor-personal-site.firebaseapp.com",
+
+  databaseURL: "https://victor-personal-site-default-rtdb.firebaseio.com",
+
+  projectId: "victor-personal-site",
+
+  storageBucket: "victor-personal-site.firebasestorage.app",
+
+  messagingSenderId: "906518577160",
+
+  appId: "1:906518577160:web:1231e25d1ab22290a9d1bd",
+
+  measurementId: "G-94XGBEG8MG"
+
+    };
+
+
+
+    const app = initializeApp(firebaseConfig);
+
+    const db = getFirestore(app);
+
+
+
+    const lista = document.getElementById("listaVisitantes");
+
+    const contador = document.getElementById("contador");
+
+
+
+    // 🔄 Atualização em tempo real
+
+    onSnapshot(collection(db, "visitantes"), (snapshot) => {
+
+      lista.innerHTML = "";
+
+      let total = 0;
+
+
+
+      snapshot.forEach((doc) => {
+
+        const item = document.createElement("li");
+
+        item.textContent = doc.data().nome;
+
+        lista.appendChild(item);
+
+        total++;
+
+      });
+
+
+
+      contador.textContent = total;
+
+    });
+
+
+
+    // ➕ Adicionar visitante
+
+    window.adicionarVisitante = async function() {
+
+      const input = document.getElementById("nomeInput");
+
+      const nome = input.value.trim();
+
+
+
+      if (nome === "") return;
+
+
+
+      await addDoc(collection(db, "visitantes"), {
+
+        nome: nome,
+
+        data: new Date()
+
+      });
+
+
+
+      input.value = "";
+
+    }
+
+</script> 
 
 
 
